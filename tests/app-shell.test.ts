@@ -96,4 +96,47 @@ describe('kube-app-manager-app', () => {
 
     expect(alert?.textContent).toContain('Unable to load apps: 500')
   })
+
+  it('shows a compact trigger and opens drawer on mobile viewport', async () => {
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(375)
+
+    const element = await renderApp()
+    window.dispatchEvent(new Event('resize'))
+    await settle(element)
+
+    const trigger = element.shadowRoot?.querySelector(
+      '[data-testid="mobile-drawer-open"]',
+    ) as HTMLButtonElement
+    expect(trigger).not.toBeNull()
+
+    trigger.click()
+    await settle(element)
+
+    const drawer = element.shadowRoot?.querySelector('.drawer')
+    expect(drawer?.classList.contains('drawer--compact-open')).toBe(true)
+  })
+
+  it('hides compact trigger while drawer is open and restores it after close', async () => {
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(375)
+
+    const element = await renderApp()
+    window.dispatchEvent(new Event('resize'))
+    await settle(element)
+
+    const triggerBeforeOpen = element.shadowRoot?.querySelector('[data-testid="mobile-drawer-open"]')
+    expect(triggerBeforeOpen).not.toBeNull()
+
+    ;(triggerBeforeOpen as HTMLButtonElement).click()
+    await settle(element)
+
+    const triggerWhileOpen = element.shadowRoot?.querySelector('[data-testid="mobile-drawer-open"]')
+    expect(triggerWhileOpen).toBeNull()
+
+    const closeButton = element.shadowRoot?.querySelector('.overlay-close') as HTMLButtonElement
+    closeButton.click()
+    await settle(element)
+
+    const triggerAfterClose = element.shadowRoot?.querySelector('[data-testid="mobile-drawer-open"]')
+    expect(triggerAfterClose).not.toBeNull()
+  })
 })

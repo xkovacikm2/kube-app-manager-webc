@@ -93,6 +93,8 @@ export class KubeAppManagerApp extends LitElement {
           </nav>
         </aside>
 
+        ${this.renderCompactTrigger()}
+
         ${this.renderBackdrop()}
 
         <main class="content">
@@ -116,6 +118,12 @@ export class KubeAppManagerApp extends LitElement {
 
   private closeMobileDrawer = () => {
     this.mobileDrawerOpen = false
+  }
+
+  private openMobileDrawer = () => {
+    if (this.isCompactViewport) {
+      this.mobileDrawerOpen = true
+    }
   }
 
   private handleResize = () => {
@@ -164,6 +172,24 @@ export class KubeAppManagerApp extends LitElement {
       aria-label="Close navigation"
       @click=${this.closeMobileDrawer}
     ></button>`
+  }
+
+  private renderCompactTrigger() {
+    if (!this.isCompactViewport || this.mobileDrawerOpen) {
+      return null
+    }
+
+    return html`
+      <button
+        class="compact-trigger"
+        type="button"
+        aria-label="Open navigation"
+        @click=${this.openMobileDrawer}
+        data-testid="mobile-drawer-open"
+      >
+        ☰
+      </button>
+    `
   }
 
   private renderGrid() {

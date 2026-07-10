@@ -108,6 +108,9 @@ export const appShellStyles = css`
   .compact-trigger {
     display: none;
     font-size: 1.2rem;
+    inset: 0.9rem auto auto 0.9rem;
+    position: fixed;
+    z-index: 25;
   }
 
   .drawer-nav {
@@ -356,6 +359,10 @@ export const appShellStyles = css`
 
     .compact-trigger {
       display: inline-flex;
+    }
+
+    .content {
+      padding-top: 4.25rem;
     }
   }
 
