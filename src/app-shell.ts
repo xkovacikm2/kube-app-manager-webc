@@ -153,12 +153,6 @@ export class KubeAppManagerApp extends LitElement {
     this.mobileDrawerOpen = false
   }
 
-  private openMobileDrawer = () => {
-    if (this.isCompactViewport) {
-      this.mobileDrawerOpen = true
-    }
-  }
-
   private renderBackdrop() {
     if (!this.isCompactViewport || !this.mobileDrawerOpen) {
       return null
