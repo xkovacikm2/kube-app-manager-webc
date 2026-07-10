@@ -96,35 +96,6 @@ export class KubeAppManagerApp extends LitElement {
         ${this.renderBackdrop()}
 
         <main class="content">
-          <header class="topbar">
-            <button
-              class="compact-trigger"
-              type="button"
-              aria-label="Open navigation"
-              @click=${this.openMobileDrawer}
-            >
-              ☰
-            </button>
-
-            <div>
-              <p class="eyebrow">Kube app manager</p>
-              <h1>${this.selectedApp?.name ?? 'Home'}</h1>
-            </div>
-
-            ${this.selectedApp
-              ? html`
-                  <a
-                    class="external-link"
-                    href=${this.selectedApp.url}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    Open in new tab
-                  </a>
-                `
-              : html`<p class="topbar-note">Launch apps without leaving this shell.</p>`}
-          </header>
-
           ${this.renderMainContent()}
         </main>
       </div>
