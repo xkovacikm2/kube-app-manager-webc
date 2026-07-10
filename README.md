@@ -95,6 +95,24 @@ helm upgrade --install kube-app-manager-webc helm/kube-app-manager-webc \
   --set appsBackendUrl=https://kovko.top/apps
 ```
 
+### cert-manager with Traefik IngressRoute
+
+Because this chart uses Traefik `IngressRoute` CRDs, cert-manager integration is done through a `Certificate` resource in the chart, not ingress-shim annotations.
+
+Enable it by setting:
+
+- `ingress.tls.enabled=true`
+- `ingress.tls.secretName=<your-tls-secret>`
+- `certManager.enabled=true`
+- `certManager.issuerRef.name=<your-issuer-or-clusterissuer-name>`
+
+Example:
+
+```sh
+helm upgrade --install kube-app-manager-webc helm/kube-app-manager-webc \
+  -f kovkotop-values.yaml
+```
+
 ## Important Files
 
 - [src/app-shell.ts](/workspaces/kube-app-manager-webc/src/app-shell.ts): main Lit shell component.

@@ -11,61 +11,42 @@ spec:
     scheme: https
     permanent: true
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: {{ include "kube-app-manager-webc.fullname" . }}-web
   labels:
     {{- include "kube-app-manager-webc.labels" . | nindent 4 }}
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: {{ .Values.ingress.webEntryPoint | quote }}
-    traefik.ingress.kubernetes.io/router.middlewares: {{ printf "%s-redirect@kubernetescrd" (include "kube-app-manager-webc.fullname" .) | quote }}
 spec:
-  {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  rules:
-    - host: {{ .Values.ingress.host | quote }}
-      http:
-        paths:
-          - path: {{ .Values.ingress.path }}
-            pathType: {{ .Values.ingress.pathType }}
-            backend:
-              service:
-                name: {{ include "kube-app-manager-webc.fullname" . }}
-                port:
-                  number: {{ .Values.service.port }}
+  entryPoints:
+    - {{ .Values.ingress.webEntryPoint | quote }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`{{ .Values.ingress.path }}`)
+      middlewares:
+        - name: {{ include "kube-app-manager-webc.fullname" . }}-redirect
+      services:
+        - name: {{ include "kube-app-manager-webc.fullname" . }}
+          port: {{ .Values.service.port }}
 ---
 {{- end }}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: {{ include "kube-app-manager-webc.fullname" . }}
   labels:
     {{- include "kube-app-manager-webc.labels" . | nindent 4 }}
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: {{ .Values.ingress.webSecureEntryPoint | quote }}
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    {{- with .Values.ingress.annotations }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
 spec:
-  {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
+  entryPoints:
+    - {{ .Values.ingress.webSecureEntryPoint | quote }}
+  {{- if .Values.ingress.tls.enabled }}
   tls:
-    {{- toYaml .Values.ingress.tls | nindent 4 }}
+    secretName: {{ include "kube-app-manager-webc.tlsSecretName" . }}
   {{- end }}
-  rules:
-    - host: {{ .Values.ingress.host | quote }}
-      http:
-        paths:
-          - path: {{ .Values.ingress.path }}
-            pathType: {{ .Values.ingress.pathType }}
-            backend:
-              service:
-                name: {{ include "kube-app-manager-webc.fullname" . }}
-                port:
-                  number: {{ .Values.service.port }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`{{ .Values.ingress.path }}`)
+      services:
+        - name: {{ include "kube-app-manager-webc.fullname" . }}
+          port: {{ .Values.service.port }}
 {{- end }}

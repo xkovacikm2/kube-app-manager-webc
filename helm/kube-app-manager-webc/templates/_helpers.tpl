@@ -38,3 +38,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- printf "https://%s/apps" .Values.ingress.host -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "kube-app-manager-webc.tlsSecretName" -}}
+{{- if .Values.ingress.tls.secretName -}}
+{{- .Values.ingress.tls.secretName -}}
+{{- else -}}
+{{- printf "%s-tls" (include "kube-app-manager-webc.fullname" .) -}}
+{{- end -}}
+{{- end -}}

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: hocikto19/kube-app-manager-webc
-  pullPolicy: always
+  pullPolicy: Always
   tag: latest
 
 imagePullSecrets: []
@@ -32,11 +32,18 @@ ingress:
   annotations: {}
   host: kube-app-manager.example.com
   path: /
-  pathType: Prefix
   webEntryPoint: web
   webSecureEntryPoint: websecure
   redirectFromWeb: true
-  tls: []
+  tls:
+    enabled: true
+
+certManager:
+  enabled: false
+  issuerRef:
+    name: ""
+    kind: ClusterIssuer
+    group: cert-manager.io
 
 # Usually this should point to the same host as the ingress host, including the /apps path.
 appsBackendUrl: ""
