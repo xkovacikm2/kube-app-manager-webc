@@ -1,0 +1,29 @@
+{
+  "name": "Kube app manager webc",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false,
+      "dockerCompose": false
+    },
+    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {
+    }
+  },
+  "runArgs": [
+    "--network=host"
+  ],
+  "postCreateCommand": "npm ci",
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.npmrc,target=/home/node/.npmrc,type=bind,readonly",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/node/.gitconfig,type=bind,readonly",
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,readonly"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "storybookjs.storybook-vscode"
+      ]
+    }
+  }
+}

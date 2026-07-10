@@ -1,0 +1,3 @@
+1. The app is exposed through the Traefik ingress host configured in values.yaml.
+2. APPS_BACKEND_URL is passed to the container and should point at the real backend /apps endpoint, usually on the same host.
+3. If TLS is enabled in your cluster, add the appropriate ingress.tls values before installing.

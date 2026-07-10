@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100svh;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: #eef2f3;
+}
+
+* {
+  box-sizing: border-box;
+}

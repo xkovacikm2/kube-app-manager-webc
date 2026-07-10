@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kube-app-manager-webc
+description: Lit app launcher for kube-app-manager-webc
+type: application
+version: 0.1.0
+appVersion: "0.0.0"
